@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shared Rouxtine</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+  <h1>Someone shared a Rouxtine with you</h1>
+  <p>A Rouxtine is a practice plan for the Roux method. The plan is stored in the link itself,
+    after the #, and browsers don't send that part to this website.</p>
+
+  <div class="card" id="has-code" hidden>
+    <code class="share" id="code"></code>
+    <button type="button" id="copy">Copy code</button>
+    <p class="muted" id="copied" aria-live="polite"></p>
+  </div>
+  <p id="no-code" hidden>This link has no code in it. Ask for the link again.</p>
+
+  <h2>Open it in Rouxtine</h2>
+  <p>With Rouxtine installed, this link opens the app straight away. Otherwise, copy the code,
+    then paste it into Rouxtine's import screen.</p>
+  <p class="muted">Rouxtine isn't on Google Play yet.</p>
+
+  <footer><a href="/">nauroth.dev</a></footer>
+</main>
+<script>
+  (function () {
+    var raw = location.hash.slice(1);
+    try { raw = decodeURIComponent(raw); } catch (e) { /* keep the raw text */ }
+    raw = raw.trim().slice(0, 5000);
+    if (!raw) { document.getElementById('no-code').hidden = false; return; }
+    document.getElementById('code').textContent = raw;
+    document.getElementById('has-code').hidden = false;
+    document.getElementById('copy').addEventListener('click', function () {
+      var done = function (text) { document.getElementById('copied').textContent = text; };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(raw).then(function () { done('Copied.'); },
+          function () { done('Copying failed. Select the code and copy it by hand.'); });
+      } else {
+        done('Select the code and copy it by hand.');
+      }
+    });
+  })();
+</script>
+</body>
+</html>
